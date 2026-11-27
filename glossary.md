@@ -1,0 +1,40 @@
+# Plain-English glossary
+
+- **A/B test:** A fair comparison between two versions.
+- **A/A test:** Two random groups receive the same experience to check the system.
+- **Analysis unit:** What one row represents, often a person.
+- **ATE:** Average treatment effect; average difference caused by the change.
+- **Bandit:** A method that shifts traffic toward options that look better while learning.
+- **Bayesian analysis:** Describes uncertainty with a probability model and prior information.
+- **Causal effect:** The change in an outcome caused by a treatment.
+- **Confidence interval:** A range that communicates uncertainty around an estimate.
+- **Control:** The group receiving the current experience.
+- **CUPED:** Uses pre-experiment data to reduce random noise.
+- **Delta Method:** Estimates uncertainty for a ratio such as clicks per view.
+- **Driver metric:** A supporting measure that helps explain a change.
+- **Factorial design:** Tests combinations of several changes.
+- **Guardrail:** A measure that should not get meaningfully worse.
+- **Heavy tail:** A few people have much larger values than most.
+- **Hypothesis:** A prediction that can be checked with data.
+- **ITT:** Intention-to-treat; compare people by the group they were assigned to.
+- **Interference:** One person's treatment affects another person's outcome.
+- **Invariant metric:** A measure expected to stay the same if the test runs correctly.
+- **MDE:** Minimum detectable effect; smallest change the plan can reliably notice.
+- **Metric:** A number used to represent an outcome.
+- **Novelty effect:** A reaction to something new that may fade.
+- **OEC:** Overall Evaluation Criterion; broad measure tied to the experiment goal.
+- **Outcome:** What is measured, such as a purchase or lesson start.
+- **P-value:** How unusual the data would be if a stated no-effect model were true. Not the chance that treatment works.
+- **Power:** Chance the test detects an effect of the planned size if real.
+- **Practical significance:** Whether a change is big enough to matter.
+- **Primary metric:** Main measure used to judge success.
+- **Quasi-experiment:** Observational comparison designed to imitate a fair experiment.
+- **Random assignment:** Chance decides who receives each version.
+- **Ratio metric:** A measure made by dividing totals, like clicks per view.
+- **Relative lift:** Change relative to the starting value. A move from 10% to 12% is 2 percentage points or 20% relative lift.
+- **SRM:** Sample Ratio Mismatch; observed group counts differ from the planned split.
+- **Seasonality:** Regular patterns tied to time.
+- **Statistical significance:** Crossing an evidence threshold; not the same as practical value.
+- **Switchback:** Randomly alternate a whole system between versions over time blocks.
+- **Treatment:** The group receiving the change.
+- **Unit of randomization:** The thing assigned to a version: a person, store, city, etc.
