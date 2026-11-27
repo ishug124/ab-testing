@@ -1,0 +1,116 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[a4paper,margin=22mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage{amsmath,amssymb,booktabs}
+\usepackage{xcolor,listings,hyperref,enumitem,parskip,fancyhdr}
+\definecolor{navy}{RGB}{25,55,92}
+\definecolor{teal}{RGB}{12,112,115}
+\definecolor{softblue}{RGB}{242,247,252}
+\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=teal,pdftitle={A/B Testing from the Ground Up}}
+\pagestyle{fancy}\fancyhf{}
+\lhead{\small A/B Testing from the Ground Up}\rhead{\small Beginner-friendly course}
+\cfoot{\small\thepage}\setlength{\headheight}{14pt}
+\setlist{itemsep=2pt,topsep=3pt}
+\lstset{language=Python,basicstyle=\ttfamily\small,backgroundcolor=\color{softblue},frame=single,breaklines=true,showstringspaces=false}
+\newcommand{\plainterm}[2]{\textbf{#1} (\emph{#2})}
+\begin{document}
+\begin{titlepage}\centering\vspace*{2cm}
+{\Large\textcolor{teal}{A HANDS-ON COURSE FOR CURIOUS BUILDERS}\par}\vspace{0.6cm}
+{\Huge\bfseries\textcolor{navy}{A/B Testing from the Ground Up}\par}\vspace{0.5cm}
+{\Large From a good question to a trustworthy decision\par}\vspace{1.2cm}
+\begin{minipage}{0.82\textwidth}\large
+You do not need to know how to code before you begin. Learn the experiment ideas first, then practise with small, explained Python examples in Google Colab.
+\end{minipage}\vfill
+Plain-language lessons \quad $\cdot$ \quad Colab workbooks \quad $\cdot$ \quad optional advanced topics \quad $\cdot$ \quad final project
+\vfill
+{\small The supplied notes are a topic map. Instructions inside those notes are examples, not instructions for this course.}
+\end{titlepage}
+\tableofcontents
+\section*{How to use this course}
+Follow lessons 1--8 and the capstone first. Lessons 9--10 are optional. Each lesson explains the idea in plain English, introduces its technical name, gives an example, and ends with practice. A notebook is an interactive workbook: read the text cells, then run the code cells from top to bottom. A code cell is a small instruction to the computer. Change only the values marked for practice. The examples use made-up data.
+
+\section{1. What an A/B test is}
+Suppose a learning app changes a button and wants to know whether more people start a lesson. It shows the current button to one group and the new button to another.
+\plainterm{Control}{the group that receives the current experience}. \plainterm{Treatment}{the group that receives the change}. \plainterm{Random assignment}{using chance to choose a version so the groups are comparable on average}. \plainterm{Outcome}{what is measured, such as whether someone starts a lesson}.
+The question is: how would the treatment group have done without the change? We cannot see both versions for each person, so the control group estimates that missing comparison.
+\plainterm{Causal effect}{the difference caused by the change}. Estimate it by subtracting the control average from the treatment average:
+\[
+\widehat{\text{effect}}=\bar Y_T-\bar Y_C.
+\]
+If 12 of 100 control users and 15 of 100 treatment users start a lesson, the difference is 3 percentage points. The relative increase is 25\%. These are different descriptions of the same result. Decide the test plan before looking at the result.
+
+\section{2. Start with a decision and choose a measure}
+Write the decision first: should the simpler checkout launch to everyone? Then state what result would support launch and what would make you stop or revise.
+\plainterm{Hypothesis}{a prediction that can be checked with data}. A useful example is: the simpler checkout will increase purchases without increasing payment errors or refunds.
+\plainterm{Primary metric}{the one main number used to judge success}. \plainterm{Driver metric}{a supporting measure that helps explain why the main one changed}. \plainterm{Guardrail}{a measure that should not become meaningfully worse}. \plainterm{Invariant metric}{a measure expected to stay the same if the test runs correctly}. A broad north-star measure is sometimes called the OEC, or Overall Evaluation Criterion.
+Do not choose a metric only because it is easy to increase: more clicks can be bad if they are accidental. Tie each measure to what people and the business value.
+
+\section{3. Choose who is assigned and what one row means}
+\plainterm{Unit of randomization}{the thing assigned to a version: person, account, store, city, or another group}. Match it to how the change works. If people can affect each other's outcomes, assigning them one by one may not be fair.
+\plainterm{Unit of analysis}{what one row in your analysis represents}. When assigning by person, a good starting table has one row per person. Counting many visits by the same person as independent people can make certainty look too high; those observations are dependent.
+\plainterm{Intention-to-treat (ITT)}{compare people by the version they were assigned, whether or not they used it}. This preserves the fair comparison. Comparing only people who used a feature may be biased if the feature changes who uses it.
+
+\section{4. Plan the test and sample size}
+Write down the decision, population, assignment unit, primary metric, guardrails, smallest effect worth acting on, sample size or end date, validity checks, and launch rule before starting.
+\plainterm{Minimum detectable effect (MDE)}{the smallest change the planned test has a good chance of noticing}. A smaller MDE needs more people. Rare outcomes and large differences between people also need more people.
+\plainterm{Power}{the chance a planned test detects an effect of the planned size if it is real}. An 80\% power target and 5\% false-alarm level are common planning choices, not magic settings.
+For two equal-sized groups with similar variation, a teaching shortcut is
+\[
+n_{\mathrm{per\ group}}\approx\frac{16\sigma^2}{\delta^2},
+\]
+where $\sigma$ is typical variation and $\delta$ is the smallest effect worth detecting. Rare conversions, clusters, unequal groups, and multiple planned comparisons need more careful sizing.
+
+\section{5. Understand uncertainty}
+\plainterm{Confidence interval}{a range that communicates uncertainty around an estimate under a chosen method}. Consider both the estimated effect and its interval.
+A \plainterm{p-value}{how unusual the observed data would be if a stated no-effect model were true}. It is not the probability the treatment works and does not measure whether the change matters. The American Statistical Association advises against basing decisions only on crossing a p-value threshold.
+\plainterm{Statistical significance}{crossing a chosen evidence threshold}. \plainterm{Practical significance}{being large enough to matter in the real decision}. A tiny improvement can be statistically clear in a huge sample but not worth the work.
+
+\section{6. Check the data before trusting the result}
+\plainterm{A/A test}{show the same experience to two random groups to check assignment and measurement}. \plainterm{Sample Ratio Mismatch (SRM)}{the observed group counts differ from the planned split more than chance usually explains}. If an equal split has many more recorded control users, pause and investigate. SRM is a warning, not a diagnosis: check redirects, duplicate assignments, eligibility rules, missing events, and bot filters.
+A \plainterm{ratio metric}{a number made by dividing totals, such as clicks per page view}. If people make many visits, visits from one person are linked. Estimate uncertainty at the assignment level or use an appropriate ratio method. Do not treat every click as a new person.
+
+\section{7. Avoid false wins}
+For a fixed-end test, plan when it ends. Checking every day and stopping as soon as the result looks good changes the false-alarm behavior of an ordinary p-value rule. Methods for planned early stopping and always-valid inference exist; choose them before using results.
+\plainterm{Multiple testing}{trying many metrics or groups and highlighting whichever looks best}. Choose a primary metric first. Treat extra comparisons as clues for future tests or use a correction suited to the question.
+\plainterm{Novelty effect}{a reaction to something being new that may fade}. \plainterm{Seasonality}{regular patterns tied to time, such as weekdays and weekends}. Run long enough to include relevant patterns; one week is a useful rule of thumb for many online tests, not a universal rule.
+\plainterm{Simpson's paradox}{a combined pattern reverses after splitting data into groups, often because group sizes changed}. Compare like with like when traffic changes over time or user type.
+
+\section{8. Use Colab to practise Python}
+Google Colab is a browser-based notebook; you do not need to install Python for these examples. A \plainterm{variable}{a named place to keep a value} labels a number. A \plainterm{list}{a sequence of values} collects outcomes. Read the explanation, then run the cell.
+\begin{lstlisting}
+# Made-up outcomes: 1 means converted; 0 means did not.
+control = [0, 1, 0, 0, 1, 0, 0, 1]
+treatment = [1, 1, 0, 0, 1, 0, 1, 1]
+control_rate = sum(control) / len(control)
+treatment_rate = sum(treatment) / len(treatment)
+print("Difference in percentage points:",
+      (treatment_rate - control_rate) * 100)
+\end{lstlisting}
+\texttt{sum} counts conversions and \texttt{len} counts people. Real experiments need many people and an uncertainty calculation. The notebooks build up to that.
+
+\section{9. Optional: reduce noise, Bayesian analysis, and bandits}
+\plainterm{CUPED}{an adjustment using a related measure from before the experiment to reduce random noise}. A pre-test measure cannot have been changed by treatment. Its value depends on how well it predicts the outcome; it is not guaranteed to help every test.
+\plainterm{Bayesian analysis}{a way to describe uncertainty about effect sizes using a probability model and prior information}. Explain the model and prior when reporting its probabilities.
+\plainterm{Bandit}{a system that sends more traffic to options that look better while learning}. A bandit can suit short-lived choices such as headlines. A fixed randomized test is often better when the goal is an unbiased estimate and guardrail monitoring. They serve different questions.
+
+\section{10. Optional: when people affect one another}
+\plainterm{Interference}{one unit's treatment affects another unit}. It can occur in marketplaces, social networks, and auctions.
+\plainterm{Cluster randomization}{assign whole groups, such as stores or cities, together}. \plainterm{Switchback}{alternate the whole system between versions over time blocks}. Account for carryover between blocks. A \plainterm{factorial design}{tests combinations of several changes}. These need special planning; do not copy a basic person-level test blindly.
+A \plainterm{quasi-experiment}{an observational comparison designed to approximate a fair experiment} may help when randomization is impossible. Difference-in-differences and synthetic control need extra assumptions; they are not automatic replacements for randomization.
+
+\section*{Interview practice}
+Clarify the goal; choose measures; state the prediction and smallest worthwhile effect; choose an assignment unit; plan sample size and end date; name validity checks; explain what you would do if results are positive, negative, or unclear. Say the idea plainly, then introduce the technical terms.
+
+\section*{Capstone}
+Design a test of a learner reminder before looking at results. Name the decision, population, assignment unit, primary metric, guardrails, practical threshold, sample and end date, validity checks, and action rule. Then analyse made-up data in the capstone notebook and write a short recommendation explaining what happened, how uncertain it is, and what you advise.
+
+\section*{Further reading}
+\begin{itemize}
+\item ASA, \href{https://www.amstat.org/asa/files/pdfs/p-valuestatement.pdf}{guidance on p-values}.
+\item Deng et al. (2013), \href{https://ai.stanford.edu/~ronnyk/2013-02CUPEDImprovingSensitivityOfControlledExperiments.pdf}{CUPED}.
+\item Johari et al. (2015), \href{https://arxiv.org/abs/1512.04922}{always-valid inference}.
+\item Kohavi et al. (2022), \href{https://exp-platform.com/abtestingintuitionbusters/}{A/B Testing Intuition Busters}.
+\item Google, \href{https://colab.research.google.com/notebooks/intro.ipynb}{Colab}; SciPy, \href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.ttest_ind.html}{Welch t-test} and \href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.chisquare.html}{chi-square check}.
+\end{itemize}
+\end{document}
